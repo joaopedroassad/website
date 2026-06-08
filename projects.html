@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — João Assad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=2" />
+  <script>
+    // Apply saved theme before paint to avoid flash
+    (function () {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+  </script>
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <canvas id="nn-bg"></canvas>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="logo">JA</a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html" class="nav-active">Projects</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+      <span class="theme-icon">
+        <span class="icon-sun"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+        <span class="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </span>
+    </button>
+  </nav>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+
+    function applyTheme(goLight) {
+      if (goLight) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    toggle.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+      if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        applyTheme(!isLight);
+        return;
+      }
+
+      const rect = toggle.getBoundingClientRect();
+      const x = rect.left + rect.width  / 2;
+      const y = rect.top  + rect.height / 2;
+
+      const radius = Math.hypot(
+        Math.max(x, window.innerWidth  - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      const transition = document.startViewTransition(() => applyTheme(!isLight));
+
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 300, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)' }
+        );
+      });
+    });
+  </script>
+
+  <main class="projects-snap-container">
+
+  <section class="projects-hero">
+    <h2>Projects</h2>
+  </section>
+
+  <section class="project-screen" style="top:0;z-index:1">
+    <div class="project-entry">
+      <div class="project-header">
+        <span class="project-num">01</span>
+        <h3 class="project-title">Image Composition Grading</h3>
+        <div class="project-tags">
+          <span>Python</span><span>PyTorch</span><span>Computer Vision</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-img-wrap"><img class="project-img" src="Photo.jpg" alt="Image Composition Grading"></div>
+        <p>
+          Fine-tuned ResNet-18 with a regression head to predict the aesthetic
+          composition score of a photograph on a 1–5 scale, trained on the CADB
+          dataset of 10,000+ images. Used transfer learning with frozen early layers, data augmentation,
+          early stopping, and hyperparameter tuning. Final model achieved 0.36 MAE
+          and 0.21 MSE on the test split. Built as a UTMIST Machine Learning Fundamentals
+          project.
+        </p>
+        <div class="project-links">
+          <a href="https://github.com/joaopedroassad/Image-Assessment-Model" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-screen" style="top:3.5rem;z-index:2">
+    <div class="project-entry">
+      <div class="project-header">
+        <span class="project-num">02</span>
+        <h3 class="project-title">Echo</h3>
+        <div class="project-tags">
+          <span>Arduino</span><span>C</span><span>Hardware</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-img-wrap"><img class="project-img" src="Photo.jpg" alt="Echo"></div>
+        <p>
+          3D-printed Arduino-based assistive device that uses echolocation to help blind
+          people navigate their surroundings. Conducted user research by
+          interviewing members of Paraná's Institute for Blind People to inform
+          the design and improve usability. Made in partnership with Guilherme Bastiani.
+        </p>
+        <div class="project-links">
+          <a href="">CAD</a>
+          <a href="https://github.com/joaopedroassad/" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-copy">&copy; 2026 João Assad</span>
+    <div class="footer-links">
+      <a href="https://github.com/joaopedroassad/" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/in/joaopedroassad/" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  </main>
+
+  <script>
+    (function () {
+      var screens = document.querySelectorAll('.project-screen');
+      if (screens.length < 2) return;
+      var last = screens[screens.length - 1];
+      var savedTops = [];
+      for (var i = 0; i < screens.length; i++) savedTops.push(screens[i].style.top);
+
+      var locked = false;
+      var triggerY = 0;
+
+      function docTop(el) {
+        var t = 0;
+        while (el) { t += el.offsetTop; el = el.offsetParent; }
+        return t;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!locked) {
+          var computed = parseFloat(getComputedStyle(last).top) || 0;
+          if (last.getBoundingClientRect().top <= computed + 2) {
+            locked = true;
+            triggerY = window.scrollY;
+            // Read ALL positions before changing anything
+            var vpTops = [], flowTops = [];
+            for (var i = 0; i < screens.length; i++) {
+              vpTops.push(screens[i].getBoundingClientRect().top);
+              flowTops.push(docTop(screens[i]));
+            }
+            // Switch all to relative with pixel offsets
+            for (var i = 0; i < screens.length; i++) {
+              screens[i].style.position = 'relative';
+              screens[i].style.top = (triggerY + vpTops[i] - flowTops[i]) + 'px';
+            }
+          }
+        } else if (window.scrollY <= triggerY) {
+          locked = false;
+          for (var i = 0; i < screens.length; i++) {
+            screens[i].style.position = 'sticky';
+            screens[i].style.top = savedTops[i];
+          }
+        }
+      });
+    })();
+  </script>
+
+  <script>
+    const dot = document.getElementById('cursor');
+    let mx = -100, my = -100;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+    });
+
+    (function loop() {
+      dot.style.transform = `translate(${mx}px, ${my}px)`;
+      requestAnimationFrame(loop);
+    })();
+
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('a, button')) dot.classList.add('cursor-hover');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('a, button')) dot.classList.remove('cursor-hover');
+    });
+  </script>
+
+  <script>
+    document.addEventListener('click', e => {
+      const link = e.target.closest('a[href]');
+      if (!link || link.target) return;
+      let url;
+      try { url = new URL(link.href, location.href); } catch { return; }
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname) return;
+      e.preventDefault();
+      const dest = link.href;
+      const main = document.querySelector('main');
+      main.style.transition = 'opacity 0.35s ease';
+      main.style.opacity = '0';
+      setTimeout(() => { location.href = dest; }, 350);
+    });
+  </script>
+  <script src="nn-bg.js?v=6"></script>
+
+</body>
+</html>

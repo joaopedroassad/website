@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>João Assad — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=2" />
+  <script>
+    // Apply saved theme before paint to avoid flash
+    (function () {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+  </script>
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <canvas id="nn-bg"></canvas>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="logo">JA</a>
+    <ul>
+      <li><a href="index.html" class="nav-active">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+      <span class="theme-icon">
+        <span class="icon-sun"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+        <span class="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </span>
+    </button>
+  </nav>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+
+    function applyTheme(goLight) {
+      if (goLight) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    toggle.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+      // Fallback: no View Transitions support or reduced motion
+      if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        applyTheme(!isLight);
+        return;
+      }
+
+      // Get the centre of the toggle button as the circle origin
+      const rect = toggle.getBoundingClientRect();
+      const x = rect.left + rect.width  / 2;
+      const y = rect.top  + rect.height / 2;
+
+      // Radius that reaches the farthest corner of the screen
+      const radius = Math.hypot(
+        Math.max(x, window.innerWidth  - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      const transition = document.startViewTransition(() => applyTheme(!isLight));
+
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 300, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)' }
+        );
+      });
+    });
+  </script>
+
+  <main>
+
+  <!-- Hero -->
+  <section id="hero">
+    <p class="greeting">Hi, I'm</p>
+    <h1>João Assad</h1>
+    <p class="tagline"><span class="typewriter-wrap"><span id="typewriter"></span><span class="cursor">|</span></span></p>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2>About</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a first-year Engineering Science student at the University of Toronto with a great interest in
+          machine learning, data analysis, and programming.
+        </p>
+        <div class="edu-block">
+          <span class="edu-label">BASc Engineering Science</span>
+          <span class="edu-meta">University of Toronto &middot; Expected 2029</span>
+        </div>
+        <a href="Resume_João_Assad.pdf" target="_blank" class="resume-btn">
+          Resume
+        </a>
+      </div>
+      <div class="skills">
+        <h3>Skills</h3>
+        <ul class="skill-list">
+          <li>Python</li>
+          <li>PyTorch</li>
+          <li>C</li>
+          <li>HTML</li>
+          <li>JavaScript</li>
+          <li>SQL</li>
+          <li>MATLAB</li>
+          <li>CAD</li>
+          <li>MS Office</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Get in Touch</h2>
+    <p>Contact me at <button class="email-copy" id="emailCopy" title="Click to copy">j.assad@mail.utoronto.ca</button></p>
+  </section>
+
+  <footer>
+    <span class="footer-copy">&copy; 2026 João Assad</span>
+    <div class="footer-links">
+      <a href="https://github.com/joaopedroassad/" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/in/joaopedroassad/" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  </main>
+
+  <script>
+    const phrases = [
+      'Engineering Science student at UofT',
+      'Python programmer',
+      'Full-stack developer',
+      'Open-Source Contributor',
+      'Engineering Science student at UofT',
+      'C programmer',
+      'Full-stack developer',
+      'Open-Source Contributor',
+      'Engineering Science student at UofT',
+      'JavaScript programmer',
+      'Full-stack developer',
+      'Open-Source Contributor',
+    ];
+
+    const el      = document.getElementById('typewriter');
+    const cursor  = document.querySelector('.cursor');
+    const wrapper = document.querySelector('.typewriter-wrap');
+    let phraseIndex = 0;
+    let charIndex   = 0;
+
+    const TYPE_SPEED    = 30;
+    const PAUSE_AFTER   = 1800;
+    const FADE_DURATION = 1200;
+    const PAUSE_BEFORE  = 0;
+
+    function tick() {
+      cursor.classList.add('typing');
+      charIndex++;
+      el.textContent = phrases[phraseIndex].slice(0, charIndex);
+
+      if (charIndex === phrases[phraseIndex].length) {
+        cursor.classList.remove('typing');
+        setTimeout(() => {
+          wrapper.classList.add('fade-out');
+          setTimeout(() => {
+            el.textContent = '';
+            wrapper.classList.remove('fade-out');
+            charIndex = 0;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            setTimeout(tick, PAUSE_BEFORE);
+          }, FADE_DURATION);
+        }, PAUSE_AFTER);
+        return;
+      }
+
+      setTimeout(tick, TYPE_SPEED + Math.random() * 40);
+    }
+
+    setTimeout(tick, 600);
+  </script>
+
+  <script>
+    const dot = document.getElementById('cursor');
+    let mx = -100, my = -100; // start offscreen
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+    });
+
+    // Use rAF so the dot never lags behind on fast moves
+    (function loop() {
+      dot.style.transform = `translate(${mx}px, ${my}px)`;
+      requestAnimationFrame(loop);
+    })();
+
+    // Grow on clickable elements
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('a, button')) dot.classList.add('cursor-hover');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('a, button')) dot.classList.remove('cursor-hover');
+    });
+  </script>
+
+  <script>
+    document.getElementById('emailCopy').addEventListener('click', () => {
+      navigator.clipboard.writeText('j.assad@mail.utoronto.ca');
+    });
+
+    document.addEventListener('click', e => {
+      const link = e.target.closest('a[href]');
+      if (!link || link.target) return;
+      let url;
+      try { url = new URL(link.href, location.href); } catch { return; }
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname) return; // same-page / anchor
+      e.preventDefault();
+      const dest = link.href;
+      const main = document.querySelector('main');
+      main.style.transition = 'opacity 0.35s ease';
+      main.style.opacity = '0';
+      setTimeout(() => { location.href = dest; }, 350);
+    });
+  </script>
+  <script src="nn-bg.js?v=6"></script>
+
+</body>
+</html>
